@@ -7,6 +7,7 @@ import pygame
 from arena import *
 from pacman import *
 from pygame.locals import (KEYDOWN, K_RIGHT, K_d, K_LEFT, K_a, K_UP, K_w, K_DOWN, K_s, K_ESCAPE)
+import numpy as np
 
 ## Costanti
 FRAME_RATE = 30
@@ -25,22 +26,53 @@ sprites = pygame.image.load('pacman_sprites.png')
 
 playing = True
 pacman.direction(-2, 0)
+
+# Q-table：
+Q_table = np.random.rand(29,34)
+print(Q_table)
+Q_table[10:14,23] = 1
+table_x = 13
+table_y = 23
 while playing:
+
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
     ## Ciclo degli eventi esterni
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT:
-            playing = False
-            esc = True
-        elif e.type == pygame.KEYDOWN:
-            if e.key in (K_RIGHT, K_d): pacman.direction(2, 0)
-            elif e.key in (K_LEFT, K_a): pacman.direction(-2, 0)
-            elif e.key in (K_UP, K_w): pacman.direction(0, -2)
-            elif e.key in (K_DOWN, K_s): pacman.direction(0, 2)
-            if e.key == pygame.K_ESCAPE:
-                playing = False
-                esc = True
+
+    # table position:
+    if round(pacman._x / 8) == (pacman._x / 8):
+        table_x = int(pacman._x / 8)
+    if round(pacman._y / 8) == (pacman._y / 8):
+        table_y = int(pacman._y / 8)
+
+    values = [Q_table[table_x,table_y-1], Q_table[table_x,table_y+1], Q_table[table_x-1, table_y], Q_table[table_x+1, table_y]]
+    maxAction = np.argmax(values)
+
+    if (maxAction == 0):
+        pacman.direction(0, -2)
+    elif maxAction == 1:
+        pacman.direction(0, 2)
+    elif maxAction == 2:
+        pacman.direction(-2, 0)
+    else:
+        pacman.direction(2, 0)
+
+
+    #if Q_table[int(np.floor(pacman._x / 8)), int(np.floor(pacman._y / 8))] == 1:
+
+    # for e in pygame.event.get():
+    #     if e.type == pygame.QUIT:
+    #         playing = False
+    #         esc = True
+    #     elif e.type == pygame.KEYDOWN:
+    #         if e.key in (K_RIGHT, K_d): pacman.direction(2, 0)
+    #         elif e.key in (K_LEFT, K_a): pacman.direction(-2, 0)
+    #         elif e.key in (K_UP, K_w): pacman.direction(0, -2)
+    #         elif e.key in (K_DOWN, K_s): pacman.direction(0, 2)
+    #         if e.key == pygame.K_ESCAPE:
+    #             playing = False
+    #             esc = True
+
     arena.move_all()
     ## Stampa a video dei personaggi
     for a in arena.actors():
