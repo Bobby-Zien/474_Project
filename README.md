@@ -13,3 +13,5 @@ Pac-Man reimplementation in Python 3 through pygame library for university progr
 To <b>play</b>, run pacman_game.py and use directional arrows to move.
 <br>
 Developed in collaboration with <a href="https://github.com/franksacco">franksacco</a>
+
+https://github.com/NeymarL/Pacman-RL
