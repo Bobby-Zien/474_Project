@@ -1,4 +1,8 @@
 # Pac-Man
+Aurther of Pac-Man: 
+https://github.com/d1ggs/pacman
+
+
 Pac-Man reimplementation in Python 3 through pygame library for university programming course.<br>
 <ul>
   <li>Single level fully working with power-ups and bonus points. </li>
